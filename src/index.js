@@ -3,6 +3,8 @@ import _ from "lodash";
 import * as d3 from "d3";
 
 function component() {
+  let data = [2, 8, 1, 2];
+
   const element = document.createElement("div");
   element.innerHTML = _.join(["Hello", "webpack"], " ");
 
@@ -12,8 +14,21 @@ function component() {
     .attr("fill", "green")
     .attr("transform", "scale(8)");
 
-  let current_x = 455;
-  let current_y = 455;
+  //adjusting position variables
+  let deltaX = 15;
+  let deltaY = 15;
+
+  let current_x = deltaX;
+  let current_y = deltaY;
+
+  data.forEach(value => {
+    ///drawCircle(value);
+    //current_y = 470;
+    //drawRectangle(value);
+    //current_y = 490;
+    drawPropCircle(value);
+  });
+
   function drawCircle(radius) {
     svg
       .append("circle")
@@ -25,14 +40,14 @@ function component() {
     current_x += 25;
   }
 
-  drawCircle(2);
-  drawCircle(8);
-  drawCircle(1);
-  drawCircle(2);
+  // drawCircle(2);
+  // drawCircle(8);
+  // drawCircle(1);
+  // drawCircle(2);
 
   //Working with a geometry that reflects the real translation from data to shape
-  current_x = 455;
-  current_y = 470;
+  // current_x = 455;
+  // current_y = 470;
   function drawRectangle(radius) {
     svg
       .append("rect")
@@ -45,14 +60,14 @@ function component() {
     current_x += 25;
   }
 
-  drawRectangle(2);
-  drawRectangle(8);
-  drawRectangle(1);
-  drawRectangle(2);
+  // drawRectangle(2);
+  // drawRectangle(8);
+  // drawRectangle(1);
+  // drawRectangle(2);
 
   //Working with a proportional geometry area that reflects the real translation from data to shape
-  current_x = 455;
-  current_y = 490;
+  // current_x = 455;
+  // current_y = 490;
   function drawPropCircle(radius) {
     svg
       .append("circle")
@@ -64,10 +79,10 @@ function component() {
     current_x += 25;
   }
 
-  drawPropCircle(2);
-  drawPropCircle(8);
-  drawPropCircle(1);
-  drawPropCircle(2);
+  // drawPropCircle(2);
+  // drawPropCircle(8);
+  // drawPropCircle(1);
+  // drawPropCircle(2);
 
   return element;
 }
