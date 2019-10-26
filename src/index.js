@@ -21,20 +21,20 @@ function component() {
   let current_x = deltaX;
   let current_y = deltaY;
 
-  //grouping vectors: greating a group of svg
+  //grouping vectors: creating a group of svg
   const gRect = svg.append("g");
   gRect.attr("class", "rectangles");
   const gCirc = svg.append("g");
   gCirc.attr("class", "propCircles");
   data.forEach(value => {
-    ///drawCircle(value);
+    drawCircle(gCirc, value);
     //current_y = 470;
-    //drawRectangle(value);
+    drawRectangle(gRect, value);
     //current_y = 490;
     drawPropCircle(gCirc, value);
   });
 
-  function drawCircle(radius) {
+  function drawCircle(vectorGroup, radius) {
     svg
       .append("circle")
       .attr("fill", "red")
@@ -53,7 +53,7 @@ function component() {
   //Working with a geometry that reflects the real translation from data to shape
   // current_x = 455;
   // current_y = 470;
-  function drawRectangle(radius) {
+  function drawRectangle(vecrtorGroup, radius) {
     svg
       .append("rect")
       .attr("fill", "blue")
