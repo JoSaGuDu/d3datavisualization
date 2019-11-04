@@ -26,6 +26,8 @@ function component() {
   gRect.attr("class", "rectangles");
   const gCirc = svg.append("g");
   gCirc.attr("class", "propCircles");
+
+  //Draw
   data.forEach(value => {
     drawCircle(gCirc, value);
     //current_y = 470;
