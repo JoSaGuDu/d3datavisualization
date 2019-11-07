@@ -163,8 +163,9 @@ function component() {
       })
     ) // INPUT FOR THE SCALING: extend returns the maximun and minimun value in data simultaneusly
     .range([0, width]); //OUTPUT FROM THE SCALING
+
   let y = d3
-    .scaleTime()
+    .scaleLinear()
     .domain(
       d3.extent(data, function(d) {
         return d.value1;
