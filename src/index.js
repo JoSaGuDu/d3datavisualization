@@ -134,16 +134,35 @@ function component() {
     .append("g")
     .attr("transform", "translate(" + margin + ", " + margin + ")");
 
-  //Draw a line/lines
+  //Drawing lines programatically
+
+  //Draw a line
   let line1 = d3
     .line() //Returns an svg path
     .x(d => x(d.date))
     .y(d => y(d.value1));
 
+  //generate the svg
+  dataGroup
+    .append("path")
+    .data([data])
+    .attr("fill", "none")
+    .attr("stroke", "red")
+    .attr("d", line1); //Actual append of the path to the svg
+
+  //Draw a line
   let line2 = d3
     .line() //Returns an svg path
     .x(d => x(d.date))
     .y(d => y(d.value2));
+
+  //generate the svg
+  dataGroup
+    .append("path")
+    .data([data])
+    .attr("fill", "none")
+    .attr("stroke", "blue")
+    .attr("d", line2); //Actual append of the path to the svg
 
   //Parse string dates as object dates
   let parseTime = d3.timeParse("%m/%d/%Y");
@@ -172,21 +191,6 @@ function component() {
       })
     )
     .range([height, 0]); //Remember that the svg canvas 0 is on the upper left corner => invert the order of the paramethers for the  Y axis.
-
-  //generate the svg
-  dataGroup
-    .append("path")
-    .data([data])
-    .attr("fill", "none")
-    .attr("stroke", "red")
-    .attr("d", line1); //Actual append of the path to the svg
-
-  dataGroup
-    .append("path")
-    .data([data])
-    .attr("fill", "none")
-    .attr("stroke", "blue")
-    .attr("d", line2); //Actual append of the path to the svg
 
   //generate X axis
   let xAxisGroup = dataGroup //Get yourself a gropu to draw the x axis and labels
