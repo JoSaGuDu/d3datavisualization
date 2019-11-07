@@ -97,29 +97,29 @@ function component() {
   --------------------END OF FIRST DEMO-------------------------*/
   /*---------------------LINE CHART------------------------------ */
   const data = [
-    { date: "10/25/2018", value: 1 },
-    { date: "10/26/2018", value: 3 },
-    { date: "10/27/2018", value: 0 },
-    { date: "10/28/2018", value: 0 },
-    { date: "10/29/2018", value: 5 },
-    { date: "10/30/2018", value: 8 },
-    { date: "10/31/2018", value: 7 },
-    { date: "11/01/2018", value: 11 },
-    { date: "11/02/2018", value: 23 },
-    { date: "11/03/2018", value: 13 },
-    { date: "11/04/2018", value: 15 },
-    { date: "11/05/2018", value: 37 },
-    { date: "11/06/2018", value: 32 },
-    { date: "11/07/2018", value: 38 },
-    { date: "11/08/2018", value: 42 },
-    { date: "11/09/2018", value: 43 },
-    { date: "11/10/2018", value: 21 },
-    { date: "11/11/2018", value: 24 },
-    { date: "11/12/2018", value: 50 },
-    { date: "11/13/2018", value: 53 },
-    { date: "11/14/2018", value: 59 },
-    { date: "11/15/2018", value: 61 },
-    { date: "11/16/2018", value: 62 }
+    { date: "10/25/2018", value1: 1, value2: 0 },
+    { date: "10/26/2018", value1: 3, value2: 0 },
+    { date: "10/27/2018", value1: 0, value2: 25 },
+    { date: "10/28/2018", value1: 0, value2: 62 },
+    { date: "10/29/2018", value1: 5, value2: 5 },
+    { date: "10/30/2018", value1: 8, value2: 37 },
+    { date: "10/31/2018", value1: 7, value2: 12 },
+    { date: "11/01/2018", value1: 11, value2: 55 },
+    { date: "11/02/2018", value1: 23, value2: 44 },
+    { date: "11/03/2018", value1: 13, value2: 53 },
+    { date: "11/04/2018", value1: 15, value2: 18 },
+    { date: "11/05/2018", value1: 37, value2: 12 },
+    { date: "11/06/2018", value1: 32, value2: 60 },
+    { date: "11/07/2018", value1: 38, value2: 60 },
+    { date: "11/08/2018", value1: 42, value2: 60 },
+    { date: "11/09/2018", value1: 43, value2: 3 },
+    { date: "11/10/2018", value1: 21, value2: 3 },
+    { date: "11/11/2018", value1: 24, value2: 2 },
+    { date: "11/12/2018", value1: 50, value2: 15 },
+    { date: "11/13/2018", value1: 53, value2: 3 },
+    { date: "11/14/2018", value1: 59, value2: 15 },
+    { date: "11/15/2018", value1: 61, value2: 3 },
+    { date: "11/16/2018", value1: 62, value2: 19 }
   ];
   const margin = 50;
 
@@ -134,11 +134,16 @@ function component() {
     .append("g")
     .attr("transform", "translate(" + margin + ", " + margin + ")");
 
-  //Draw a line
-  let line = d3
+  //Draw a line/lines
+  let line1 = d3
     .line() //Returns an svg path
     .x(d => x(d.date))
-    .y(d => y(d.value));
+    .y(d => y(d.value1));
+
+  let line2 = d3
+    .line() //Returns an svg path
+    .x(d => x(d.date))
+    .y(d => y(d.value2));
 
   //Parse string dates as object dates
   let parseTime = d3.timeParse("%m/%d/%Y");
@@ -162,17 +167,25 @@ function component() {
     .scaleTime()
     .domain(
       d3.extent(data, function(d) {
-        return d.value;
+        return d.value1;
       })
     )
     .range([height, 0]); //Remember that the svg canvas 0 is on the upper left corner => invert the order of the paramethers for the  Y axis.
+
   //generate the svg
   dataGroup
     .append("path")
     .data([data])
     .attr("fill", "none")
     .attr("stroke", "red")
-    .attr("d", line); //Actual append of the path to the svg
+    .attr("d", line1); //Actual append of the path to the svg
+
+  dataGroup
+    .append("path")
+    .data([data])
+    .attr("fill", "none")
+    .attr("stroke", "blue")
+    .attr("d", line2); //Actual append of the path to the svg
 
   //generate X axis
   let xAxisGroup = dataGroup //Get yourself a gropu to draw the x axis and labels
