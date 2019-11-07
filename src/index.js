@@ -95,101 +95,102 @@ function component() {
 
 
   --------------------END OF FIRST DEMO-------------------------*/
-/*---------------------LINE CHART------------------------------ */
-const data = [{ date: "10/25/2018", value: 1 },
-              { date: "10/26/2018", value: 3 },
-              { date: "10/27/2018", value: 0 },
-              { date: "10/28/2018", value: 0 },
-              { date: "10/29/2018", value: 5 },
-              { date: "10/30/2018", value: 8 },
-              { date: "10/31/2018", value: 7 },
-              { date: "11/01/2018", value: 11 },
-              { date: "11/02/2018", value: 23 },
-              { date: "11/03/2018", value: 13 },
-              { date: "11/04/2018", value: 15 },
-              { date: "11/05/2018", value: 37 },
-              { date: "11/06/2018", value: 32 },
-              { date: "11/07/2018", value: 38 },
-              { date: "11/08/2018", value: 42 },
-              { date: "11/09/2018", value: 43 },
-              { date: "11/10/2018", value: 21 },
-              { date: "11/11/2018", value: 24 },
-              { date: "11/12/2018", value: 50 },
-              { date: "11/13/2018", value: 53 },
-              { date: "11/14/2018", value: 59 },
-              { date: "11/15/2018", value: 61 },
-                  { date: "11/16/2018", value: 62 }
-              ];
-const margin = 50;
+  /*---------------------LINE CHART------------------------------ */
+  const data = [
+    { date: "10/25/2018", value: 1 },
+    { date: "10/26/2018", value: 3 },
+    { date: "10/27/2018", value: 0 },
+    { date: "10/28/2018", value: 0 },
+    { date: "10/29/2018", value: 5 },
+    { date: "10/30/2018", value: 8 },
+    { date: "10/31/2018", value: 7 },
+    { date: "11/01/2018", value: 11 },
+    { date: "11/02/2018", value: 23 },
+    { date: "11/03/2018", value: 13 },
+    { date: "11/04/2018", value: 15 },
+    { date: "11/05/2018", value: 37 },
+    { date: "11/06/2018", value: 32 },
+    { date: "11/07/2018", value: 38 },
+    { date: "11/08/2018", value: 42 },
+    { date: "11/09/2018", value: 43 },
+    { date: "11/10/2018", value: 21 },
+    { date: "11/11/2018", value: 24 },
+    { date: "11/12/2018", value: 50 },
+    { date: "11/13/2018", value: 53 },
+    { date: "11/14/2018", value: 59 },
+    { date: "11/15/2018", value: 61 },
+    { date: "11/16/2018", value: 62 }
+  ];
+  const margin = 50;
 
-const width = 1024;
-const height = 768;
+  const width = 1024;
+  const height = 768;
 
-let dataGroup = d3.select("body").append("svg")
-.attr("width", width + margin)
-.attr("height", height + 2* margin)
-.append("g")
-.attr("transform", "translate(" + margin + ", " + margin + ")");
+  let dataGroup = d3
+    .select("body")
+    .append("svg")
+    .attr("width", width + margin)
+    .attr("height", height + 2 * margin)
+    .append("g")
+    .attr("transform", "translate(" + margin + ", " + margin + ")");
 
-//Draw a line
-let line = d3.line()
-.x(d => x(d.date))
-.y(d => y(d.value));
+  //Draw a line
+  let line = d3
+    .line() //Returns an svg path
+    .x(d => x(d.date))
+    .y(d => y(d.value));
 
-//Parse string dates as object dates
-let parseTime = d3.timeParse("%m/%d/%Y");
+  //Parse string dates as object dates
+  let parseTime = d3.timeParse("%m/%d/%Y");
 
-data.forEach(function (d) {
-  d.date = parseTime(d.date);
-});
+  data.forEach(function(d) {
+    d.date = parseTime(d.date);
+  });
 
-//let dataDatesParsed = data.map(d => parseTime(d.date));
+  //let dataDatesParsed = data.map(d => parseTime(d.date));
 
-//scales: adapt the data points to the width and heigth of the chart
-let x = d3.scaleTime()
-        .domain(d3.extent(data, function (d) { return d.date }))// returns the maximun and minimun value in data
-        .range([0, width])
-        ;
-let y = d3.scaleTime()
-        .domain(d3.extent(data, function (d) { return d.value }))
-        .range([height, 0])
-        ;        
+  //scales: adapt the data points to the width and heigth of the chart
+  let x = d3
+    .scaleTime()
+    .domain(
+      d3.extent(data, function(d) {
+        return d.date;
+      })
+    ) // INPUT FOR THE SCALING: extend returns the maximun and minimun value in data simultaneusly
+    .range([0, width]); //OUTPUT FROM THE SCALING
+  let y = d3
+    .scaleTime()
+    .domain(
+      d3.extent(data, function(d) {
+        return d.value;
+      })
+    )
+    .range([height, 0]); //Remember that the svg canvas 0 is on the upper left corner => invert the order of the paramethers for the  Y axis.
+  //generate the svg
+  dataGroup
+    .append("path")
+    .data([data])
+    .attr("fill", "none")
+    .attr("stroke", "red")
+    .attr("d", line); //Actual append of the path to the svg
 
-//generate the svg
-dataGroup.append('path')
-          .data([data])
-          .attr('fill', 'none')
-          .attr('stroke', 'red')
-          .attr('d', line)
+  //generate X axis
+  let xAxisGroup = dataGroup //Get yourself a gropu to draw the x axis and labels
+    .append("g")
+    .attr("class", "xAxisGroup")
+    .attr("transform", `translate(0, ${height})`); //Remember that the svg canvas 0 is on the upper left corner => Move the X axis to the bottom.
 
-//generate X axis
-let xAxisGroup = dataGroup
-                .append("g")
-                .attr("class","xAxisGroup")
-                .attr("transform", `translate(0, ${height})`)
+  let xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d"));
 
-let xAxis = d3.axisBottom(x)
-            .tickFormat (d3.timeFormat("%Y-%m-%d"));
+  xAxis(xAxisGroup);
 
-xAxis(xAxisGroup);
+  //generate Y axis
+  let yAxisGroup = dataGroup.append("g").attr("class", "yAxisGroup");
+  //.attr("transform", `translate(0, ${height})`)
 
-//generate Y axis
-let yAxisGroup = dataGroup
-                .append("g")
-                .attr("class","yAxisGroup")
-                //.attr("transform", `translate(0, ${height})`)
+  let yAxis = d3.axisLeft(y);
 
-let yAxis = d3.axisLeft(y);
-            
-
-yAxis(yAxisGroup);
-
-              
-
-
-
-
-
+  yAxis(yAxisGroup);
 
   return element;
 }
