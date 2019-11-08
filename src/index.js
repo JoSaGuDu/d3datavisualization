@@ -176,8 +176,11 @@ function component() {
   }
 
   //Make color pallette availablo for programtically plot charts
-  const colors = ["red", "blue", "green"];
+  //const colors = ["red", "blue", "green"];
+  //Using d3 color scale which is an predefined array of hex colors
+  const colors = d3.schemeCategory10;
   console.log(`Colors: ${colors}`);
+
   //affect prpeorties with colors and plot charts programatically
   for (let i = 0; i < propertiesNames.length; i++) {
     console.log("Ploting...");
