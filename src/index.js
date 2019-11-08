@@ -134,36 +134,6 @@ function component() {
     .append("g")
     .attr("transform", "translate(" + margin + ", " + margin + ")");
 
-  //Drawing lines programatically
-
-  //Draw a line
-  let line1 = d3
-    .line() //Returns an svg path
-    .x(d => x(d.date))
-    .y(d => y(d.value1));
-
-  //generate the svg
-  dataGroup
-    .append("path")
-    .data([data])
-    .attr("fill", "none")
-    .attr("stroke", "red")
-    .attr("d", line1); //Actual append of the path to the svg
-
-  //Draw a line
-  let line2 = d3
-    .line() //Returns an svg path
-    .x(d => x(d.date))
-    .y(d => y(d.value2));
-
-  //generate the svg
-  dataGroup
-    .append("path")
-    .data([data])
-    .attr("fill", "none")
-    .attr("stroke", "blue")
-    .attr("d", line2); //Actual append of the path to the svg
-
   //Parse string dates as object dates
   let parseTime = d3.timeParse("%m/%d/%Y");
 
@@ -192,6 +162,28 @@ function component() {
     )
     .range([height, 0]); //Remember that the svg canvas 0 is on the upper left corner => invert the order of the paramethers for the  Y axis.
 
+  //Get properties to plot programatically
+  let propertiesNames = [];
+
+  for (var name in data[0]) {
+    if (name == "date") {
+      continue;
+    }
+    propertiesNames.push(name);
+    console.log("Properties", propertiesNames);
+    console.log(`Property: ${name}`);
+    console.log("Properties names length: ", propertiesNames.length);
+  }
+
+  //Make color pallette availablo for programtically plot charts
+  const colors = ["red", "blue", "green"];
+  console.log(`Colors: ${colors}`);
+  //affect prpeorties with colors and plot charts programatically
+  for (let i = 0; i < propertiesNames.length; i++) {
+    console.log("Ploting...");
+    plotVariable(propertiesNames[i], colors[i]);
+  }
+
   //generate X axis
   let xAxisGroup = dataGroup //Get yourself a gropu to draw the x axis and labels
     .append("g")
@@ -209,6 +201,37 @@ function component() {
   let yAxis = d3.axisLeft(y);
 
   yAxis(yAxisGroup);
+
+  //Drawing lines programatically
+  function plotVariable(varibleToPlot, plotColor) {
+    //Draw a line
+    let line1 = d3
+      .line() //Returns an svg path
+      .x(d => x(d.date))
+      .y(d => y(d[varibleToPlot]));
+
+    //generate the svg
+    dataGroup
+      .append("path")
+      .data([data])
+      .attr("fill", "none")
+      .attr("stroke", plotColor)
+      .attr("d", line1); //Actual append of the path to the svg
+
+    // //Draw a line
+    // let line2 = d3
+    //   .line() //Returns an svg path
+    //   .x(d => x(d.date))
+    //   .y(d => y(varibleToPlot));
+
+    // //generate the svg
+    // dataGroup
+    //   .append("path")
+    //   .data([data])
+    //   .attr("fill", "none")
+    //   .attr("stroke", plotColor)
+    //   .attr("d", line2); //Actual append of the path to the svg
+  }
 
   return element;
 }
