@@ -3,99 +3,110 @@ import _ from "lodash";
 import * as d3 from "d3";
 
 function component() {
-  /*----------------------------FIRST DEMO---------------
-      // let data = [2, 8, 1, 2];
+  /*-------------------------RK-CHART-----------------------------*/
+  const start = 0;
+  const end = 0;
+  const rk_width = 1000;
+  const rk_height = 200;
 
-      // const element = document.createElement("div");
-      // element.innerHTML = _.join(["Hello", "webpack"], " ");
+  const rk_chart_data = [
+    { x: 0, y: 0 },
+    { x: 6.7, y: 1 },
+    { x: 8.1, y: 32 },
+    { x: 9.5, y: 1 },
+    { x: 100, y: 0 }
+  ];
 
-      // let svg = d3
-      //   .select("body")
-      //   .append("svg")
-      //   .attr("fill", "green")
-      //   .attr("transform", "scale(8)");
+  let rk_dataGroup = d3
+    .select("svg")
+    .append("g")
+    .attr("transform", "translate(32,0)")
+    .attr("class", "plotArea");
 
-      // //adjusting position variables
-      // let deltaX = 15;
-      // let deltaY = 15;
+  //Get properties to plot programatically
+  // let rk_propertiesNames = [];
 
-      // let current_x = deltaX;
-      // let current_y = deltaY;
+  // for (let name in rk_chart_data[0]) {
+  //   if (name == "x") {
+  //     continue;
+  //   }
+  //   rk_propertiesNames.push(name);
+  //   console.log("Properties", rk_propertiesNames);
+  //   console.log(`Property: ${name}`);
+  //   console.log("Properties names length: ", rk_propertiesNames.length);
+  // }
 
-      // //grouping vectors: creating a group of svg
-      // const gRect = svg.append("g");
-      // gRect.attr("class", "rectangles");
-      // const gCirc = svg.append("g");
-      // gCirc.attr("class", "propCircles");
+  //affect prpeorties with colors and plot charts programatically
+  // for (let i = 0; i < rk_propertiesNames.length; i++) {
+  console.log("Ploting...");
+  // rk_plotVariable(rk_chart_data.y, colors[0]);
+  // }
 
-      // //Draw
-      // data.forEach(value => {
-      //   drawCircle(gCirc, value);
-      //   //current_y = 470;
-      //   drawRectangle(gRect, value);
-      //   //current_y = 490;
-      //   drawPropCircle(gCirc, value);
-      // });
+  //function rk_plotVariable(y, plotColor) {
+  //Draw a line
+  let line = d3
+    .line() //Returns an svg path
+    .x(d => x(d.x))
+    .y(d => y(d.y))
+    .curve(d3.curveMonotoneX);
 
-      // function drawCircle(vectorGroup, radius) {
-      //   svg
-      //     .append("circle")
-      //     .attr("fill", "red")
-      //     .attr("r", radius)
-      //     .attr("cx", current_x)
-      //     .attr("cy", current_y);
+  let x = d3
+    .scaleLinear()
+    .domain(
+      d3.extent(rk_chart_data, function(d) {
+        return d.x;
+      })
+    )
+    .range([0, rk_width]);
 
-      //   current_x += 25;
-      // }
+  let y = d3
+    .scaleLinear()
+    .domain(
+      d3.extent(rk_chart_data, function(d) {
+        return d.y;
+      })
+    )
+    .range([rk_height, 0]);
+  //generate the svg
 
-      // // drawCircle(2);
-      // // drawCircle(8);
-      // // drawCircle(1);
-      // // drawCircle(2);
+  let defs = rk_dataGroup.append("defs");
+  let gradientVideotron = defs
+    .append("linearGradient")
+    .attr("id", "gradientVideotron")
+    .attr("gradientUnits", "userSpaceOnUse");
 
-      // //Working with a geometry that reflects the real translation from data to shape
-      // // current_x = 455;
-      // // current_y = 470;
-      // function drawRectangle(vecrtorGroup, radius) {
-      //   svg
-      //     .append("rect")
-      //     .attr("fill", "blue")
-      //     .attr("width", 20)
-      //     .attr("height", radius)
-      //     .attr("x", current_x)
-      //     .attr("y", current_y);
+  gradientVideotron
+    .attr("x1", "500")
+    .attr("x2", "500")
+    .attr("y1", "-40")
+    .attr("y2", "160");
+  gradientVideotron
+    .append("stop")
+    .attr("class", "yellowVideotronStop1")
+    .attr("offset", "0.154656")
+    .attr("stop-color", "#FFD200");
+  gradientVideotron
+    .append("stop")
+    .attr("class", "yellowVideotronStop2")
+    .attr("offset", "0.509935")
+    .attr("stop-color", "#FEE803");
+  gradientVideotron
+    .append("stop")
+    .attr("class", "yellowVideotronStop3")
+    .attr("offset", "0.900742")
+    .attr("stop-color", "#FFD200");
 
-      //   current_x += 25;
-      // }
+  rk_dataGroup
+    .append("path")
+    .data([rk_chart_data])
+    .attr("fill", "url(#gradientVideotron)")
+    .attr("stroke", "red")
+    .attr("d", line); //Actual append of the path to the svg
+  // }
 
-      // // drawRectangle(2);
-      // // drawRectangle(8);
-      // // drawRectangle(1);
-      // // drawRectangle(2);
+  /*-------------------------END OF RK-CHART-----------------------------*/
 
-      // //Working with a proportional geometry area that reflects the real translation from data to shape
-      // // current_x = 455;
-      // // current_y = 490;
-      // function drawPropCircle(vectorGroup, radius) {
-      //   //ppending rectangles to the group better than to the canvas
-      //   vectorGroup
-      //     .append("circle")
-      //     .attr("fill", "purple")
-      //     .attr("r", Math.sqrt(radius))
-      //     .attr("cx", current_x)
-      //     .attr("cy", current_y);
-
-      //   current_x += 25;
-      // }
-
-      // // drawPropCircle(2);
-      // // drawPropCircle(8);
-      // // drawPropCircle(1);
-      // // drawPropCircle(2);
-
-
-  --------------------END OF FIRST DEMO-------------------------*/
-  /*---------------------LINE CHART------------------------------ */
+  /*---------------------LINE CHART DEMO------------------------------ 
   const data = [
     { date: "10/25/2018", value1: 1, value2: 0 },
     { date: "10/26/2018", value1: 3, value2: 0 },
@@ -121,6 +132,8 @@ function component() {
     { date: "11/15/2018", value1: 61, value2: 3 },
     { date: "11/16/2018", value1: 62, value2: 19 }
   ];
+
+  //--DEMO CHART
   const margin = 50;
 
   const width = 1024;
@@ -140,8 +153,6 @@ function component() {
   data.forEach(function(d) {
     d.date = parseTime(d.date);
   });
-
-  //let dataDatesParsed = data.map(d => parseTime(d.date));
 
   //scales: adapt the data points to the width and heigth of the chart
   let x = d3
@@ -188,7 +199,7 @@ function component() {
   }
 
   //generate X axis
-  let xAxisGroup = dataGroup //Get yourself a gropu to draw the x axis and labels
+  let xAxisGroup = dataGroup //Get yourself a group to draw the x axis and labels
     .append("g")
     .attr("class", "xAxisGroup")
     .attr("transform", `translate(0, ${height})`); //Remember that the svg canvas 0 is on the upper left corner => Move the X axis to the bottom.
@@ -220,23 +231,9 @@ function component() {
       .attr("fill", "none")
       .attr("stroke", plotColor)
       .attr("d", line1); //Actual append of the path to the svg
-
-    // //Draw a line
-    // let line2 = d3
-    //   .line() //Returns an svg path
-    //   .x(d => x(d.date))
-    //   .y(d => y(varibleToPlot));
-
-    // //generate the svg
-    // dataGroup
-    //   .append("path")
-    //   .data([data])
-    //   .attr("fill", "none")
-    //   .attr("stroke", plotColor)
-    //   .attr("d", line2); //Actual append of the path to the svg
-  }
+  }*/
 
   return element;
-}
+} //end component
 
 document.body.appendChild(component());
