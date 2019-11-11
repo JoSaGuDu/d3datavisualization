@@ -10,11 +10,17 @@ function component() {
   const rk_height = 200;
 
   const rk_chart_data = [
-    { x: 0, y: 0 },
-    { x: 6.7, y: 1 },
-    { x: 8.1, y: 32 },
-    { x: 9.5, y: 1 },
-    { x: 100, y: 0 }
+    { control: 0, experience: 0, y: 0 },
+    { control: 1, experience: 1, y: 0.5 },
+    { control: 6, experience: 4.2, y: 1 },
+    { control: 6.5, experience: 4.9, y: 1 },
+    { control: 6.7, experience: 5.1, y: 1 },
+    { control: 8.1, experience: 6.5, y: 32 },
+    { control: 9.5, experience: 7.9, y: 1 },
+    { control: 9.7, experience: 8.1, y: 1 },
+    { control: 10.2, experience: 8.6, y: 1 },
+    { control: 15, experience: 10, y: 0.5 },
+    { control: 100, experience: 100, y: 0 }
   ];
 
   let rk_dataGroup = d3
@@ -24,85 +30,97 @@ function component() {
     .attr("class", "plotArea");
 
   //Get properties to plot programatically
-  // let rk_propertiesNames = [];
+  const rk_propertiesNames = [];
+  const colors = [
+    { base: "#FFD200", accent: "#FEE803" },
+    { base: "#333333", accent: "#C4C4C4" }
+  ];
 
-  // for (let name in rk_chart_data[0]) {
-  //   if (name == "x") {
-  //     continue;
-  //   }
-  //   rk_propertiesNames.push(name);
-  //   console.log("Properties", rk_propertiesNames);
-  //   console.log(`Property: ${name}`);
-  //   console.log("Properties names length: ", rk_propertiesNames.length);
-  // }
+  for (let name in rk_chart_data[0]) {
+    if (name == "y") {
+      continue;
+    }
+    rk_propertiesNames.push(name);
+    console.log("Properties", rk_propertiesNames);
+    console.log(`Property: ${name}`);
+    console.log("Properties names length: ", rk_propertiesNames.length);
+  }
 
   //affect prpeorties with colors and plot charts programatically
-  // for (let i = 0; i < rk_propertiesNames.length; i++) {
-  console.log("Ploting...");
-  // rk_plotVariable(rk_chart_data.y, colors[0]);
-  // }
+  for (let i = 0; i < rk_propertiesNames.length; i++) {
+    console.log("Ploting...");
+    console.log("data: ", rk_chart_data);
+    console.log("", rk_propertiesNames[i]);
+    console.log("color: ", colors[i]);
+    rk_plotVariable(rk_propertiesNames[i], colors[i]);
+  }
 
-  //function rk_plotVariable(y, plotColor) {
-  //Draw a line
-  let line = d3
-    .line() //Returns an svg path
-    .x(d => x(d.x))
-    .y(d => y(d.y))
-    .curve(d3.curveMonotoneX);
+  function rk_plotVariable(dataToPlot, plotColor) {
+    //Draw a line
+    let controlLine = d3
+      .line() //Returns an svg path
+      .x(d => x(d[dataToPlot]))
+      .y(d => y(d.y))
+      .curve(d3.curveMonotoneX);
 
-  let x = d3
-    .scaleLinear()
-    .domain(
-      d3.extent(rk_chart_data, function(d) {
-        return d.x;
-      })
-    )
-    .range([0, rk_width]);
+    let x = d3
+      .scaleLinear()
+      .domain(
+        d3.extent(rk_chart_data, function(d) {
+          return d[dataToPlot];
+        })
+      )
+      .range([0, rk_width]);
 
-  let y = d3
-    .scaleLinear()
-    .domain(
-      d3.extent(rk_chart_data, function(d) {
-        return d.y;
-      })
-    )
-    .range([rk_height, 0]);
-  //generate the svg
+    let y = d3
+      .scaleLinear()
+      .domain(
+        d3.extent(rk_chart_data, function(d) {
+          return d.y;
+        })
+      )
+      .range([rk_height, 0]);
+    //generate the svg
 
-  let defs = rk_dataGroup.append("defs");
-  let gradientVideotron = defs
-    .append("linearGradient")
-    .attr("id", "gradientVideotron")
-    .attr("gradientUnits", "userSpaceOnUse");
+    //Fill gradient
+    let defs = rk_dataGroup.append("defs");
+    let gradientFill = defs
+      .append("linearGradient")
+      .attr("id", `${dataToPlot}_bellFillGradient`)
+      .attr("gradientUnits", "userSpaceOnUse");
 
-  gradientVideotron
-    .attr("x1", "500")
-    .attr("x2", "500")
-    .attr("y1", "-40")
-    .attr("y2", "160");
-  gradientVideotron
-    .append("stop")
-    .attr("class", "yellowVideotronStop1")
-    .attr("offset", "0.154656")
-    .attr("stop-color", "#FFD200");
-  gradientVideotron
-    .append("stop")
-    .attr("class", "yellowVideotronStop2")
-    .attr("offset", "0.509935")
-    .attr("stop-color", "#FEE803");
-  gradientVideotron
-    .append("stop")
-    .attr("class", "yellowVideotronStop3")
-    .attr("offset", "0.900742")
-    .attr("stop-color", "#FFD200");
+    gradientFill
+      .attr("x1", "500")
+      .attr("x2", "500")
+      .attr("y1", "-40")
+      .attr("y2", "205");
+    gradientFill
+      .append("stop")
+      .attr("class", "bellFillGradeientStep1")
+      .attr("stop-color", plotColor.base);
+    console.log("base color: ", plotColor.base);
+    gradientFill
+      .append("stop")
+      .attr("class", "bellFillGradeientStep2")
+      .attr("offset", "0.375")
+      .attr("stop-opacity", "0.6")
+      .attr("stop-color", plotColor.accent);
+    console.log("accent color: ", plotColor.accent);
+    gradientFill
+      .append("stop")
+      .attr("class", "bellFillGradeientStep3")
+      .attr("offset", "1")
+      .attr("stop-opacity", "0")
+      .attr("stop-color", plotColor.base);
 
-  rk_dataGroup
-    .append("path")
-    .data([rk_chart_data])
-    .attr("fill", "url(#gradientVideotron)")
-    .attr("stroke", "red")
-    .attr("d", line); //Actual append of the path to the svg
-  // }
+    // maskedGroup
+    rk_dataGroup
+      .append("path")
+      .data([rk_chart_data])
+      .attr("fill", `url("#${dataToPlot}_bellFillGradient")`)
+      .attr("stroke", "none")
+      .attr("d", controlLine); //Actual append of the path to the svg
+  }
 
   /*-------------------------END OF RK-CHART-----------------------------*/
 
