@@ -198,7 +198,7 @@ function component() {
   let xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d"));
 
   xAxis(xAxisGroup);
-
+  drawLegend(propertiesNames, dataGroup);
   //generate Y axis
   let yAxisGroup = dataGroup.append("g").attr("class", "yAxisGroup");
   //.attr("transform", `translate(0, ${height})`)
@@ -242,6 +242,72 @@ function component() {
     //   .attr("fill", "none")
     //   .attr("stroke", plotColor)
     //   .attr("d", line2); //Actual append of the path to the svg
+  }
+
+  //Draw legend
+  function drawLegend(propertiesNames, svgHost) {
+    console.log("Drawing legends");
+    let legends = [];
+
+    const canvasWidth = 200;
+    let canvasHeight;
+    const canvasX = 800;
+    const canvasY = 500;
+
+    const hMargin = 5;
+    const vMargin = 20;
+    const identifierHeight = 20;
+    const identifierWidth = 50;
+
+    canvasHeight =
+      propertiesNames.length * (identifierHeight + vMargin) + vMargin;
+    //Drawing the legend print area
+    svgHost
+      .append("rect")
+      .attr("x", canvasX)
+      .attr("y", canvasY)
+      .attr("fill", "white")
+      .attr("stroke", "black")
+      .attr("height", canvasHeight)
+      .attr("width", canvasWidth);
+
+    //Creating the legend elements
+    for (let i = 0; i < propertiesNames.length; i++) {
+      console.log("Creating legends");
+      let legendElement = {
+        title: propertiesNames[i],
+        color: d3.schemeCategory10[i]
+      };
+      legends.push(legendElement);
+    }
+
+    let currentY = canvasY + vMargin;
+
+    //Drawing the legend
+    legends.forEach(legend => {
+      //Drawing the legend identifiers
+      svgHost
+        .append("rect")
+        .attr("x", canvasX + hMargin)
+        .attr("y", currentY)
+        .attr("fill", legend.color)
+        .attr("stroke", "none")
+        .attr("height", identifierHeight)
+        .attr("width", identifierWidth)
+        .append("title") //Alt text on hover
+        .text(legend.title);
+
+      //Drawing the legend titles
+      svgHost
+        .append("text")
+        .text(legend.title)
+        .attr("font-size", "14pt")
+        .attr("fill", legend.color)
+        .attr("x", canvasX + vMargin + identifierWidth)
+        .attr("y", currentY + identifierHeight / 2);
+
+      currentY += identifierHeight + vMargin;
+    });
   }
 
   return element;
