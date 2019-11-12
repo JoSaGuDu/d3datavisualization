@@ -211,7 +211,13 @@ function component() {
     let line1 = d3
       .line() //Returns an svg path
       .x(d => x(d.date))
-      .y(d => y(d[varibleToPlot]));
+      .y(d => y(d[varibleToPlot]))
+      //.curve(d3.curveLinear); //Inerpolator for discrete data samples
+      //.curve(d3.curveStepAfter); //Inerpolator for discrete data samples measured before change or change happen AFTER measure is taken
+      //.curve(d3.curveStepBefore); //Inerpolator for discrete data samples measured after change or change happen before measure is taken
+      //.curve(d3.curveBasis); //Interpolation for continous data that smooths the line between the max and min values
+      //.curve(d3.curveCardinal); //Interpolation for continous data that smooths the line outside the max and min values
+      .curve(d3.curveMonotoneX); //Interpolation for continous data that smooths passing by the datapoints witouth overshoot(NO negative plot). Close to linear but smotthed.
 
     //generate the svg
     dataGroup
