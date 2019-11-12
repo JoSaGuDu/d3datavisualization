@@ -139,6 +139,9 @@ function component() {
 
   data.forEach(function(d) {
     d.date = parseTime(d.date);
+    //Add additional values to the chart
+    d.value3 = Math.random() * 62;
+    d.value4 = Math.random() * 62;
   });
 
   //let dataDatesParsed = data.map(d => parseTime(d.date));
@@ -170,7 +173,6 @@ function component() {
       continue;
     }
     propertiesNames.push(name);
-    console.log("Properties", propertiesNames);
     console.log(`Property: ${name}`);
     console.log("Properties names length: ", propertiesNames.length);
   }
