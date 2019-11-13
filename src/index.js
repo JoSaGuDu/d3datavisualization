@@ -163,7 +163,8 @@ function component() {
         return d.value1;
       })
     )
-    .range([height, 0]); //Remember that the svg canvas 0 is on the upper left corner => invert the order of the paramethers for the  Y axis.
+    .range([height, 0]) //Remember that the svg canvas 0 is on the upper left corner => invert the order of the paramethers for the  Y axis.
+    .nice(); //even space for the scale on univen residues at the end of scale
 
   //Get properties to plot programatically
   let propertiesNames = [];
@@ -183,7 +184,7 @@ function component() {
   const colors = d3.schemeCategory10;
   console.log(`Colors: ${colors}`);
 
-  //affect properties with colors and plot charts programatically
+  //affect properties with colors and plot charts programatically. THIS CAN BE REFACTORED A LOT!!!
   for (let i = 0; i < propertiesNames.length; i++) {
     console.log("Ploting...");
     plotVariable(propertiesNames[i], colors[i]);
@@ -198,8 +199,6 @@ function component() {
   let xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d"));
 
   xAxis(xAxisGroup);
-  drawDataPointIndicators(propertiesNames, dataGroup);
-  drawLegend(propertiesNames, dataGroup);
 
   //generate Y axis
   let yAxisGroup = dataGroup.append("g").attr("class", "yAxisGroup");
@@ -209,6 +208,43 @@ function component() {
 
   yAxis(yAxisGroup);
 
+  drawGridlines();
+  drawDataPointIndicators(propertiesNames, dataGroup);
+  drawLegend(propertiesNames, dataGroup);
+
+  //Drawing Gridlines
+  function drawGridlines() {
+    //Create horizontal ticks
+    let horizontalGridlines = d3 //actually creates a new Y axis
+      .axisLeft(y)
+      .ticks(30)
+      .tickFormat("") //no label on tick
+      .tickSize(-width);
+
+    //Append the ticks
+    let hGridlineGroup = dataGroup
+      .append("g")
+      .attr("class", "hGridline")
+      .call(horizontalGridlines);
+
+    //hGridlineGroup.call(horizontalGridlines);
+    horizontalGridlines(hGridlineGroup); //Kind of "overload" the D3 axis draw method forcing it to draw our ticks
+
+    //Create vertical ticks
+    let verticalGridlines = d3 //actually creates a new X axis
+      .axisBottom(x)
+      .ticks(30)
+      .tickFormat("") //no label on tick
+      .tickSize(height);
+
+    //Append the ticks
+    let vGridlineGroup = dataGroup
+      .append("g")
+      .attr("class", "vGridline")
+      .call(verticalGridlines);
+
+    verticalGridlines(vGridlineGroup);
+  }
   //Drawing lines programatically
   function plotVariable(varibleToPlot, plotColor) {
     //Draw a line
