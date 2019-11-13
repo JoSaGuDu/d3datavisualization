@@ -139,12 +139,15 @@ function component() {
 
   data.forEach(function(d) {
     d.date = parseTime(d.date);
+    //Add additional values to the chart
+    d.value3 = Math.random() * 62;
+    d.value4 = Math.random() * 62;
   });
 
   //let dataDatesParsed = data.map(d => parseTime(d.date));
 
   //scales: adapt the data points to the width and heigth of the chart
-  let x = d3
+  let x = d3 //Defines the actual x value for any given data point
     .scaleTime()
     .domain(
       d3.extent(data, function(d) {
@@ -153,14 +156,15 @@ function component() {
     ) // INPUT FOR THE SCALING: extend returns the maximun and minimun value in data simultaneusly
     .range([0, width]); //OUTPUT FROM THE SCALING
 
-  let y = d3
+  let y = d3 //Defines the actual y value for any given data point
     .scaleLinear()
     .domain(
       d3.extent(data, function(d) {
         return d.value1;
       })
     )
-    .range([height, 0]); //Remember that the svg canvas 0 is on the upper left corner => invert the order of the paramethers for the  Y axis.
+    .range([height, 0]) //Remember that the svg canvas 0 is on the upper left corner => invert the order of the paramethers for the  Y axis.
+    .nice(); //even space for the scale on univen residues at the end of scale
 
   //Get properties to plot programatically
   let propertiesNames = [];
@@ -170,7 +174,6 @@ function component() {
       continue;
     }
     propertiesNames.push(name);
-    console.log("Properties", propertiesNames);
     console.log(`Property: ${name}`);
     console.log("Properties names length: ", propertiesNames.length);
   }
@@ -181,7 +184,7 @@ function component() {
   const colors = d3.schemeCategory10;
   console.log(`Colors: ${colors}`);
 
-  //affect prpeorties with colors and plot charts programatically
+  //affect properties with colors and plot charts programatically. THIS CAN BE REFACTORED A LOT!!!
   for (let i = 0; i < propertiesNames.length; i++) {
     console.log("Ploting...");
     plotVariable(propertiesNames[i], colors[i]);
@@ -205,6 +208,43 @@ function component() {
 
   yAxis(yAxisGroup);
 
+  drawGridlines();
+  drawDataPointIndicators(propertiesNames, dataGroup);
+  drawLegend(propertiesNames, dataGroup);
+
+  //Drawing Gridlines
+  function drawGridlines() {
+    //Create horizontal ticks
+    let horizontalGridlines = d3 //actually creates a new Y axis
+      .axisLeft(y)
+      .ticks(30)
+      .tickFormat("") //no label on tick
+      .tickSize(-width);
+
+    //Append the ticks
+    let hGridlineGroup = dataGroup
+      .append("g")
+      .attr("class", "hGridline")
+      .call(horizontalGridlines);
+
+    //hGridlineGroup.call(horizontalGridlines);
+    horizontalGridlines(hGridlineGroup); //Kind of "overload" the D3 axis draw method forcing it to draw our ticks
+
+    //Create vertical ticks
+    let verticalGridlines = d3 //actually creates a new X axis
+      .axisBottom(x)
+      .ticks(30)
+      .tickFormat("") //no label on tick
+      .tickSize(height);
+
+    //Append the ticks
+    let vGridlineGroup = dataGroup
+      .append("g")
+      .attr("class", "vGridline")
+      .call(verticalGridlines);
+
+    verticalGridlines(vGridlineGroup);
+  }
   //Drawing lines programatically
   function plotVariable(varibleToPlot, plotColor) {
     //Draw a line
@@ -242,6 +282,91 @@ function component() {
     //   .attr("d", line2); //Actual append of the path to the svg
   }
 
+  //Draw legend
+  function drawLegend(propertiesNames, svgHost) {
+    console.log("Drawing legends");
+    let legends = [];
+
+    const canvasWidth = 200;
+    let canvasHeight;
+    const canvasX = 800;
+    const canvasY = 500;
+
+    const hMargin = 5;
+    const vMargin = 20;
+    const identifierHeight = 20;
+    const identifierWidth = 50;
+
+    canvasHeight =
+      propertiesNames.length * (identifierHeight + vMargin) + vMargin;
+    //Drawing the legend print area
+    svgHost
+      .append("rect")
+      .attr("x", canvasX)
+      .attr("y", canvasY)
+      .attr("fill", "white")
+      .attr("stroke", "black")
+      .attr("height", canvasHeight)
+      .attr("width", canvasWidth);
+
+    //Creating the legend elements
+    for (let i = 0; i < propertiesNames.length; i++) {
+      console.log("Creating legends");
+      let legendElement = {
+        title: propertiesNames[i],
+        color: d3.schemeCategory10[i]
+      };
+      legends.push(legendElement);
+    }
+
+    let currentY = canvasY + vMargin;
+
+    //Drawing the legend
+    legends.forEach(legend => {
+      //Drawing the legend identifiers
+      svgHost
+        .append("rect")
+        .attr("x", canvasX + hMargin)
+        .attr("y", currentY)
+        .attr("fill", legend.color)
+        .attr("stroke", "none")
+        .attr("height", identifierHeight)
+        .attr("width", identifierWidth)
+        .append("title") //Alt text on hover
+        .text(legend.title);
+
+      //Drawing the legend titles
+      svgHost
+        .append("text")
+        .text(legend.title)
+        .attr("font-size", "14pt")
+        .attr("fill", legend.color)
+        .attr("x", canvasX + vMargin + identifierWidth)
+        .attr("y", currentY + identifierHeight / 2);
+
+      currentY += identifierHeight + vMargin;
+    });
+  }
+
+  //Draw datapoint indicators
+  function drawDataPointIndicators(propertiesNames, svgHost) {
+    data.forEach(dataPoint => {
+      for (let i = 0; i < propertiesNames.length; i++) {
+        svgHost
+          .append("circle")
+          .attr("fill", d3.schemeCategory10[i])
+          .attr("r", 5)
+          .attr("cx", x(dataPoint.date))
+          .attr("cy", y(dataPoint[propertiesNames[i]]))
+          .append("title")
+          .text(
+            `Date: ${d3.timeFormat("%Y-%m-%d")(dataPoint.date)} \n ${
+              propertiesNames[i]
+            }: ${dataPoint[propertiesNames[i]]}`
+          );
+      }
+    });
+  }
   return element;
 }
 
