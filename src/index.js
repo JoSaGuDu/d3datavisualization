@@ -3,99 +3,98 @@ import _ from "lodash";
 import * as d3 from "d3";
 
 function component() {
-  /*----------------------------FIRST DEMO---------------
-      // let data = [2, 8, 1, 2];
+  /*----------------------------FIRST DEMO---------------*/
+  // let data = [2, 8, 1, 2];
 
-      // const element = document.createElement("div");
-      // element.innerHTML = _.join(["Hello", "webpack"], " ");
+  // const element = document.createElement("div");
+  // element.innerHTML = _.join(["Hello", "webpack"], " ");
 
-      // let svg = d3
-      //   .select("body")
-      //   .append("svg")
-      //   .attr("fill", "green")
-      //   .attr("transform", "scale(8)");
+  // let svg = d3
+  //   .select("body")
+  //   .append("svg")
+  //   .attr("fill", "green")
+  //   .attr("transform", "scale(8)");
 
-      // //adjusting position variables
-      // let deltaX = 15;
-      // let deltaY = 15;
+  // //adjusting position variables
+  // let deltaX = 15;
+  // let deltaY = 15;
 
-      // let current_x = deltaX;
-      // let current_y = deltaY;
+  // let current_x = deltaX;
+  // let current_y = deltaY;
 
-      // //grouping vectors: creating a group of svg
-      // const gRect = svg.append("g");
-      // gRect.attr("class", "rectangles");
-      // const gCirc = svg.append("g");
-      // gCirc.attr("class", "propCircles");
+  // //grouping vectors: creating a group of svg
+  // const gRect = svg.append("g");
+  // gRect.attr("class", "rectangles");
+  // const gCirc = svg.append("g");
+  // gCirc.attr("class", "propCircles");
 
-      // //Draw
-      // data.forEach(value => {
-      //   drawCircle(gCirc, value);
-      //   //current_y = 470;
-      //   drawRectangle(gRect, value);
-      //   //current_y = 490;
-      //   drawPropCircle(gCirc, value);
-      // });
+  // //Draw
+  // data.forEach(value => {
+  //   drawCircle(gCirc, value);
+  //   //current_y = 470;
+  //   drawRectangle(gRect, value);
+  //   //current_y = 490;
+  //   drawPropCircle(gCirc, value);
+  // });
 
-      // function drawCircle(vectorGroup, radius) {
-      //   svg
-      //     .append("circle")
-      //     .attr("fill", "red")
-      //     .attr("r", radius)
-      //     .attr("cx", current_x)
-      //     .attr("cy", current_y);
+  // function drawCircle(vectorGroup, radius) {
+  //   svg
+  //     .append("circle")
+  //     .attr("fill", "red")
+  //     .attr("r", radius)
+  //     .attr("cx", current_x)
+  //     .attr("cy", current_y);
 
-      //   current_x += 25;
-      // }
+  //   current_x += 25;
+  // }
 
-      // // drawCircle(2);
-      // // drawCircle(8);
-      // // drawCircle(1);
-      // // drawCircle(2);
+  // // drawCircle(2);
+  // // drawCircle(8);
+  // // drawCircle(1);
+  // // drawCircle(2);
 
-      // //Working with a geometry that reflects the real translation from data to shape
-      // // current_x = 455;
-      // // current_y = 470;
-      // function drawRectangle(vecrtorGroup, radius) {
-      //   svg
-      //     .append("rect")
-      //     .attr("fill", "blue")
-      //     .attr("width", 20)
-      //     .attr("height", radius)
-      //     .attr("x", current_x)
-      //     .attr("y", current_y);
+  // //Working with a geometry that reflects the real translation from data to shape
+  // // current_x = 455;
+  // // current_y = 470;
+  // function drawRectangle(vecrtorGroup, radius) {
+  //   svg
+  //     .append("rect")
+  //     .attr("fill", "blue")
+  //     .attr("width", 20)
+  //     .attr("height", radius)
+  //     .attr("x", current_x)
+  //     .attr("y", current_y);
 
-      //   current_x += 25;
-      // }
+  //   current_x += 25;
+  // }
 
-      // // drawRectangle(2);
-      // // drawRectangle(8);
-      // // drawRectangle(1);
-      // // drawRectangle(2);
+  // // drawRectangle(2);
+  // // drawRectangle(8);
+  // // drawRectangle(1);
+  // // drawRectangle(2);
 
-      // //Working with a proportional geometry area that reflects the real translation from data to shape
-      // // current_x = 455;
-      // // current_y = 490;
-      // function drawPropCircle(vectorGroup, radius) {
-      //   //ppending rectangles to the group better than to the canvas
-      //   vectorGroup
-      //     .append("circle")
-      //     .attr("fill", "purple")
-      //     .attr("r", Math.sqrt(radius))
-      //     .attr("cx", current_x)
-      //     .attr("cy", current_y);
+  // //Working with a proportional geometry area that reflects the real translation from data to shape
+  // // current_x = 455;
+  // // current_y = 490;
+  // function drawPropCircle(vectorGroup, radius) {
+  //   //ppending rectangles to the group better than to the canvas
+  //   vectorGroup
+  //     .append("circle")
+  //     .attr("fill", "purple")
+  //     .attr("r", Math.sqrt(radius))
+  //     .attr("cx", current_x)
+  //     .attr("cy", current_y);
 
-      //   current_x += 25;
-      // }
+  //   current_x += 25;
+  // }
 
-      // // drawPropCircle(2);
-      // // drawPropCircle(8);
-      // // drawPropCircle(1);
-      // // drawPropCircle(2);
+  // // drawPropCircle(2);
+  // // drawPropCircle(8);
+  // // drawPropCircle(1);
+  // // drawPropCircle(2);
 
-
-  --------------------END OF FIRST DEMO-------------------------*/
-  /*---------------------LINE CHART------------------------------ */
+  /*--------------------END OF FIRST DEMO-------------------------*/
+  /*---------------------LINE CHART------------------------------ 
   const data = [
     { date: "10/25/2018", value1: 1, value2: 0 },
     { date: "10/26/2018", value1: 3, value2: 0 },
@@ -366,7 +365,136 @@ function component() {
           );
       }
     });
+  }*/
+  /*-----------------------------CIRCLES BIND DEMO---------------------- */
+  var values = [];
+
+  d3.xml("data/data.xml").then(function(data) {
+    var values = [];
+
+    for (var i = 0; i < data.children[0].children.length; i++) {
+      values.push(parseInt(data.children[0].children[i].innerHTML));
+    }
+
+    renderCircles(values);
+  });
+
+  function renderCircles(values) {
+    var initialX = 15;
+    var deltaX = 25;
+    var initialY = 15;
+    var deltaY = 25;
+
+    var currentX = initialX;
+    var currentY = initialY;
+
+    var svg = d3.select("body").append("svg");
+
+    svg.attr("transform", "scale(8)").attr("class", "circlesBindDemo");
+
+    var gCircles = svg.append("g");
+    gCircles.attr("class", "circleGroup");
+
+    gCircles
+      .selectAll("circle")
+      .data(values)
+      .enter()
+      .append("circle")
+      .attr("fill", "red")
+      .attr("r", x => x)
+      .attr("cx", function(x) {
+        var currentValue = currentX;
+        currentX += deltaX;
+        return currentValue;
+      })
+      .attr("cy", currentY);
+
+    // reset to draw the labels
+    currentX = currentX - values.length * deltaX;
+
+    gCircles
+      .selectAll("text")
+      .data(values)
+      .enter()
+      .append("text")
+      .text(x => x)
+      .attr("class", "textLabel")
+      .attr("x", function(x) {
+        var currentValue = currentX;
+        currentX += deltaX;
+        return currentValue;
+      })
+      .attr("y", currentY)
+      .attr("dy", -3)
+      .attr("dx", -1);
+
+    console.log(gCircles.selectAll("circle"));
+
+    currentX = initialX; //850;
+    currentY += deltaY;
+
+    var gRect = svg.append("g");
+    gRect.attr("class", "rectangleGroup");
+
+    values.forEach(x => drawRectangle(gRect, x));
+
+    currentX = initialX; //850;
+    currentY += deltaY;
+
+    var gCirclesProp = svg.append("g");
+    gCirclesProp.attr("class", "propCircleGroup");
+
+    values.forEach(x => drawProportionalCircle(x, gCirclesProp));
+
+    function drawLabel(g, value) {
+      g.append("text")
+        .text(value)
+        .attr("class", "textLabel")
+        .attr("x", currentX)
+        .attr("y", currentY)
+        .attr("dy", -3)
+        .attr("dx", -1);
+    }
+
+    function drawACircle(radius, g) {
+      g.append("circle")
+        .attr("fill", "red")
+        .attr("r", radius)
+        .attr("cx", currentX)
+        .attr("cy", currentY);
+    }
+
+    function drawCircle(radius, g) {
+      drawACircle(radius, g);
+
+      drawLabel(g, radius);
+
+      currentX += deltaX;
+    }
+
+    function drawProportionalCircle(radius, g) {
+      drawACircle(Math.sqrt(radius), g);
+
+      drawLabel(g, radius);
+
+      currentX += deltaX;
+    }
+
+    function drawRectangle(g, value) {
+      g.append("rect")
+        .attr("fill", "red")
+        .attr("height", value)
+        .attr("width", 5)
+        .attr("x", currentX)
+        .attr("y", currentY)
+        .attr("transform-origin", currentX + "," + currentY);
+
+      drawLabel(g, value);
+
+      currentX += deltaX;
+    }
   }
+  /*-----------------------------END CIRCLES BIND DEMO---------------------- */
   return element;
 }
 
