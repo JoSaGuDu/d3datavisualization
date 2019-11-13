@@ -147,7 +147,7 @@ function component() {
   //let dataDatesParsed = data.map(d => parseTime(d.date));
 
   //scales: adapt the data points to the width and heigth of the chart
-  let x = d3
+  let x = d3 //Defines the actual x value for any given data point
     .scaleTime()
     .domain(
       d3.extent(data, function(d) {
@@ -156,7 +156,7 @@ function component() {
     ) // INPUT FOR THE SCALING: extend returns the maximun and minimun value in data simultaneusly
     .range([0, width]); //OUTPUT FROM THE SCALING
 
-  let y = d3
+  let y = d3 //Defines the actual y value for any given data point
     .scaleLinear()
     .domain(
       d3.extent(data, function(d) {
@@ -183,7 +183,7 @@ function component() {
   const colors = d3.schemeCategory10;
   console.log(`Colors: ${colors}`);
 
-  //affect prpeorties with colors and plot charts programatically
+  //affect properties with colors and plot charts programatically
   for (let i = 0; i < propertiesNames.length; i++) {
     console.log("Ploting...");
     plotVariable(propertiesNames[i], colors[i]);
@@ -198,7 +198,9 @@ function component() {
   let xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d"));
 
   xAxis(xAxisGroup);
+  drawDataPointIndicators(propertiesNames, dataGroup);
   drawLegend(propertiesNames, dataGroup);
+
   //generate Y axis
   let yAxisGroup = dataGroup.append("g").attr("class", "yAxisGroup");
   //.attr("transform", `translate(0, ${height})`)
@@ -310,6 +312,25 @@ function component() {
     });
   }
 
+  //Draw datapoint indicators
+  function drawDataPointIndicators(propertiesNames, svgHost) {
+    data.forEach(dataPoint => {
+      for (let i = 0; i < propertiesNames.length; i++) {
+        svgHost
+          .append("circle")
+          .attr("fill", d3.schemeCategory10[i])
+          .attr("r", 5)
+          .attr("cx", x(dataPoint.date))
+          .attr("cy", y(dataPoint[propertiesNames[i]]))
+          .append("title")
+          .text(
+            `Date: ${d3.timeFormat("%Y-%m-%d")(dataPoint.date)} \n ${
+              propertiesNames[i]
+            }: ${dataPoint[propertiesNames[i]]}`
+          );
+      }
+    });
+  }
   return element;
 }
 
